@@ -1,4 +1,4 @@
-const config = [
+const configs = [
   {
     "burstObservatory": {
       "pingConfig": {
@@ -7,7 +7,7 @@ const config = [
         "sampling": 2,
         "timeout": "3s"
       },
-      "subjectSelector": ["ru1", "ru2", "ru3", "ru4", "ru5"]
+      "subjectSelector": ["ru1","ru2","ru3","ru4","ru5"]
     },
     "dns": {
       "queryStrategy": "UseIPv4",
@@ -18,34 +18,23 @@ const config = [
       ]
     },
     "inbounds": [
-      {
-        "listen": "127.0.0.1",
-        "port": 10808,
-        "protocol": "socks",
-        "settings": { "udp": true },
-        "tag": "socks"
-      },
-      {
-        "listen": "127.0.0.1",
-        "port": 10809,
-        "protocol": "http",
-        "tag": "http"
-      }
+      { "listen": "127.0.0.1", "port": 10808, "protocol": "socks", "settings": { "udp": true }, "tag": "socks" },
+      { "listen": "127.0.0.1", "port": 10809, "protocol": "http", "tag": "http" }
     ],
     "meta": null,
     "outbounds": [
       {
         "protocol": "vless",
         "settings": {
-          "vnext": [{
-            "address": "51.250.86.102",
-            "port": 443,
-            "users": [{
-              "encryption": "none",
-              "flow": "xtls-rprx-vision",
-              "id": "53b2c46d-bc0a-4696-9d87-6bfa77a60d1f"
-            }]
-          }]
+          "vnext": [
+            {
+              "address": "51.250.86.102",
+              "port": 443,
+              "users": [
+                { "encryption": "none", "flow": "xtls-rprx-vision", "id": "53b2c46d-bc0a-4696-9d87-6bfa77a60d1f" }
+              ]
+            }
+          ]
         },
         "streamSettings": {
           "network": "tcp",
@@ -64,44 +53,39 @@ const config = [
     ],
     "remarks": "Config 1",
     "routing": {
-      "balancers": [{
-        "fallbackTag": "ru1",
-        "selector": ["ru1", "ru2", "ru3", "ru4", "ru5"],
-        "strategy": {
-          "settings": {
-            "baselines": ["2s"],
-            "expected": 1,
-            "maxRTT": "3s",
-            "tolerance": 0.3
+      "balancers": [
+        {
+          "fallbackTag": "ru1",
+          "selector": ["ru1","ru2","ru3","ru4","ru5"],
+          "strategy": {
+            "settings": { "baselines": ["2s"], "expected": 1, "maxRTT": "3s", "tolerance": 0.3 },
+            "type": "leastLoad"
           },
-          "type": "leastLoad"
-        },
-        "tag": "auto_ru"
-      }],
+          "tag": "auto_ru"
+        }
+      ],
       "domainStrategy": "IPIfNonMatch",
       "rules": [
-        {
-          "outboundTag": "block",
-          "protocol": ["bittorrent"],
-          "type": "field"
-        },
-        {
-          "balancerTag": "auto_ru",
-          "inboundTag": ["socks", "http"],
-          "network": "tcp,udp",
-          "type": "field"
-        }
+        { "outboundTag": "block", "protocol": ["bittorrent"], "type": "field" },
+        { "balancerTag": "auto_ru", "inboundTag": ["socks","http"], "network": "tcp,udp", "type": "field" }
       ]
     }
   }
 ];
 
+const meta = {
+  "title": "RestlyConnect",
+  "supportUrl": "https://t.me/restlyconnect",
+  "updateInterval": 24,
+  "announce": "UPD: 22.02.2026 22:15 | тгк @restlyconnect"
+};
+
 module.exports = (req, res) => {
   res.setHeader("Content-Type", "application/json; charset=utf-8");
-  res.setHeader("profile-title", "RestlyConnect");
-  res.setHeader("support-url", "https://t.me/restlyconnect");
-  res.setHeader("profile-update-interval", "24");
-  res.setHeader("announce", "UPD: 22.02.2026 22:15 | тгк @restlyconnect");
+  res.setHeader("profile-title", meta.title);
+  res.setHeader("support-url", meta.supportUrl);
+  res.setHeader("profile-update-interval", meta.updateInterval.toString());
+  res.setHeader("announce", meta.announce);
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.status(200).json(config);
+  res.status(200).json({ meta, configs });
 };
