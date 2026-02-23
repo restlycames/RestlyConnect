@@ -1,8 +1,0 @@
-{
-  "routes": [
-    {
-      "src": "/sub",
-      "dest": "/api/sub.js"
-    }
-  ]
-}
