@@ -1,6 +1,18 @@
 module.exports = (req, res) => {
   const config = [
   {
+    "burstObservatory": {
+      "pingConfig": {
+        "destination": "https://www.google.com/generate_204",
+        "interval": "8s",
+        "sampling": 2,
+        "timeout": "3s"
+      },
+      "subjectSelector": [
+        "s1",
+        "s2"
+      ]
+    },
     "dns": {
       "queryStrategy": "UseIPv4",
       "servers": [
@@ -29,7 +41,7 @@ module.exports = (req, res) => {
     "meta": null,
     "outbounds": [
       {
-        "tag": "russ1",
+        "tag": "s1",
         "protocol": "vless",
         "settings": {
           "vnext": [
@@ -60,6 +72,37 @@ module.exports = (req, res) => {
         }
       },
       {
+        "tag": "s2",
+        "protocol": "vless",
+        "settings": {
+          "vnext": [
+            {
+              "address": "51.250.0.147",
+              "port": 443,
+              "users": [
+                {
+                  "id": "53b2c46d-bc0a-4696-9d87-6bfa77a60d1f",
+                  "flow": "xtls-rprx-vision",
+                  "encryption": "none"
+                }
+              ]
+            }
+          ]
+        },
+        "streamSettings": {
+          "network": "tcp",
+          "security": "reality",
+          "realitySettings": {
+            "publicKey": "FkmYFobwxLMLEktYXywmjthuEYCZggITsxwPNasTKUg",
+            "shortId": "65ce6cee3941af69",
+            "spiderX": "",
+            "serverName": "ads.x5.ru",
+            "fingerprint": "qq",
+            "show": false
+          }
+        }
+      },
+      {
         "protocol": "freedom",
         "tag": "direct"
       },
@@ -68,8 +111,29 @@ module.exports = (req, res) => {
         "tag": "block"
       }
     ],
-    "remarks": "🇷🇺 Russia | Auto",
+    "remarks": "🇪🇺 LTE #1 | Белые списки",
     "routing": {
+      "balancers": [
+        {
+          "fallbackTag": "s1",
+          "selector": [
+            "s1",
+            "s2"
+          ],
+          "strategy": {
+            "settings": {
+              "baselines": [
+                "2s"
+              ],
+              "expected": 1,
+              "maxRTT": "3s",
+              "tolerance": 0.3
+            },
+            "type": "leastLoad"
+          },
+          "tag": "auto_bal"
+        }
+      ],
       "domainStrategy": "IPIfNonMatch",
       "rules": [
         {
@@ -80,7 +144,7 @@ module.exports = (req, res) => {
           "type": "field"
         },
         {
-          "outboundTag": "russ1",
+          "balancerTag": "auto_bal",
           "inboundTag": [
             "socks",
             "http"
@@ -97,7 +161,7 @@ module.exports = (req, res) => {
   res.setHeader("profile-title", "RestlyConnect");
   res.setHeader("support-url", "https://t.me/restlyconnect");
   res.setHeader("profile-update-interval", "24");
-  res.setHeader("announce", "UPD: 23.02.2026 18:24 | tgk: @restlyconnect");
+  res.setHeader("announce", "UPD: 23.02.2026 18:35 | tgk: @restlyconnect");
   res.setHeader("Access-Control-Allow-Origin", "*");
 
   res.end(JSON.stringify(config));
