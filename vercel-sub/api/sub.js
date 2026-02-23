@@ -97,14 +97,11 @@ module.exports = (req, res) => {
     }
   ];
 
-  const titleB64 = Buffer.from("RestlyConnect").toString("base64");
-  const announceB64 = Buffer.from("UPD: 22.02.2026 22:15 | tgk @restlyconnect").toString("base64");
-
   res.setHeader("Content-Type", "application/json; charset=utf-8");
-  res.setHeader("profile-title", titleB64);
+  res.setHeader("profile-title", "RestlyConnect");
   res.setHeader("support-url", "https://t.me/restlyconnect");
   res.setHeader("profile-update-interval", "24");
-  res.setHeader("announce", announceB64);
+  res.setHeader("announce", "UPD: 23.02.2026 15:58 | tgk: @restlyconnect");
   res.setHeader("Access-Control-Allow-Origin", "*");
 
   res.end(JSON.stringify(config));
