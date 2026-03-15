@@ -5465,7 +5465,7 @@ module.exports = (req, res) => {
   res.setHeader("profile-title", "RestlyConnect");
   res.setHeader("support-url", "https://t.me/restlyconnect");
   res.setHeader("profile-update-interval", "24");
-  res.setHeader("announce", "Обновлено: 15 марта 2026 21:02 | ТГК: @restlyconnect");
+  res.setHeader("announce", "UPD: 15.03.2026 21:02 | tgk: @restlyconnect");
   res.setHeader("Access-Control-Allow-Origin", "*");
 
   res.end(JSON.stringify(config));
